@@ -3,8 +3,8 @@ import requests
 import logging
 from scrapy.spider import CrawlSpider
 from scrapy.selector import Selector
-from PornHub.items import PornVideoItem
-from PornHub.pornhub_type import PH_TYPES
+from score.items import PornVideoItem
+from score.score_type import PH_TYPES
 from scrapy.http import Request
 import re
 import json
@@ -12,8 +12,8 @@ import random
 
 
 class Spider(CrawlSpider):
-    name = 'pornHubSpider'
-    host = 'https://www.pornhub.com/'
+    name = 'scoreSpider'
+    host = 'http://quotes.toscrape.com/tag/humor/'
     start_urls = list(set(PH_TYPES))
     logging.getLogger("requests").setLevel(logging.WARNING
                                           )  # 将requests的日志级别设成WARNING
@@ -28,8 +28,7 @@ class Spider(CrawlSpider):
     # test = True
     def start_requests(self):
         for ph_type in self.start_urls:
-            yield Request(url='https://www.pornhub.com/%s' % ph_type,
-                          callback=self.parse_ph_key)
+            yield Request(url=host, callback=self.parse_ph_key)
 
     def parse_ph_key(self, response):
         selector = Selector(response)
@@ -39,7 +38,7 @@ class Spider(CrawlSpider):
         for div in divs:
             viewkey = re.findall('viewkey=(.*?)"', div.extract())
             # logging.debug(viewkey)
-            yield Request(url='https://www.pornhub.com/embed/%s' % viewkey[0],
+            yield Request(url='https://www.score.com/embed/%s' % viewkey[0],
                           callback=self.parse_ph_info)
         url_next = selector.xpath(
             '//a[@class="orangeButton" and text()="Next "]/@href').extract()

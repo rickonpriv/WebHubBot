@@ -1,5 +1,5 @@
 #coding:utf-8
-"""归纳PornHub资源链接"""
+"""归纳score资源链接"""
 PH_TYPES = [
     '',
     'recommended',
